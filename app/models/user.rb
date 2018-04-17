@@ -10,6 +10,15 @@ class User < ApplicationRecord
   validates :email, :username, presence: true
   validates :email, :username, uniqueness: true
 
+  # проверка формата email
+  validates :email, format: {with:/[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,4}/, message:'Не верно введён email'}
+
+  # проверка формата юзернейма пользователя (только латинские буквы, цифры, и знак _)
+  validates :username, format: {with:/\A\w+\z/, message: 'должен содержать только латинские буквы, цифры, и знак _'}
+
+  # проверка максимальной длинны юзернейма пользователя(не более 40 символов)
+  validates :username, :length => { :maximum => 40, message: 'не может быть болше 40 символов' }
+
   attr_accessor :password
 
   validates_presence_of :password, on: :create

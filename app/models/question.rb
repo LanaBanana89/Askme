@@ -1,6 +1,10 @@
 class Question < ApplicationRecord
 
   validates :text, :user, presence: true
+
+  # проверка максимальной длины текста вопроса (максимум 255 символов)
+  validates :text, :length => { :maximum => 255, message: 'не может быть болше 255 символов' }
+
   belongs_to :user
 
   # демонстрация жизненного цикла объекта
