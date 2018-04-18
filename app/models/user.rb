@@ -10,23 +10,24 @@ class User < ApplicationRecord
   validates :email, :username, presence: true
   validates :email, :username, uniqueness: true
 
+  # перед валидацией переводим username в нижний регистр
+  before_validation { self.username = username.downcase }
+
   # проверка формата email
-  validates :email, format: {with:/[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,4}/, message:'Не верно введён email'}
+  validates :email, format: { with: /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,4}/ }
 
   # проверка формата юзернейма пользователя (только латинские буквы, цифры, и знак _) и на уникальность
-  validates :username, format: {with:/\A\w+\z/, message: 'должен содержать только латинские буквы, цифры, и знак _'},
-                       uniqueness: { case_sensitive: false, message: 'такой ник уже существует' }
+  validates :username, format: { with: /\A\w+\z/ },
+                       uniqueness: { case_sensitive: false }
 
   # проверка максимальной длинны юзернейма пользователя(не более 40 символов)
-  validates :username, :length => { :maximum => 40, message: 'не может быть болше 40 символов' }
+  validates :username, length: { maximum: 40 }
 
   attr_accessor :password
 
   validates_presence_of :password, on: :create
   validates_confirmation_of :password
 
-  # перед сохранением переводим username в нижний регистр
-  before_save { self.username = username.downcase }
   before_save :encrypt_password
 
   def encrypt_password
