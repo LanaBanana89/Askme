@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :questions
 
   validates :email, :username, presence: true
-  validates :email, :username, uniqueness: true
+  validates :email, uniqueness: true
 
   # перед валидацией переводим username в нижний регистр
   before_validation { self.username = username.downcase }
@@ -24,9 +24,6 @@ class User < ApplicationRecord
 
   # проверка максимальной длинны юзернейма пользователя(не более 40 символов)
   validates :username, length: { maximum: 40 }
-
-  attr_accessor :password
-
   validates_presence_of :password, on: :create
   validates_confirmation_of :password
 
