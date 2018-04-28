@@ -13,7 +13,12 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
 
   # перед валидацией переводим username в нижний регистр
-  before_validation { self.username = username.downcase }
+  before_validation do
+    self.username = username.downcase;
+
+    # присваиваем цвет по умолчанию, если в поле background_color пусто
+    self.background_color = "#005a55" if self.background_color.nil?
+  end
 
   # проверка формата email
   validates :email, format: { with: /[\w._%+-]+@[\w.-]+\.[a-zA-Z]{2,4}/ }
@@ -26,6 +31,9 @@ class User < ApplicationRecord
   validates :username, length: { maximum: 40 }
   validates_presence_of :password, on: :create
   validates_confirmation_of :password
+
+  # проверка корректного ввода цвета фона в режиме редактирования профиля
+  validates :background_color, format: { with: /\A\#[\da-fA-Z]{6}\z/ }
 
   before_save :encrypt_password
 

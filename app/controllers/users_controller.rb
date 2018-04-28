@@ -16,7 +16,8 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
 
     if @user.save
-      redirect_to root_url, notice: 'Пользователь успешно зарегистрирован'
+      redirect_to @user, notice: 'Вы успешно зарегистрированы'
+      session[:user_id] = @user.id # сразу логиним пользователя после регистрации
     else
       render 'new'
     end
@@ -43,6 +44,13 @@ class UsersController < ApplicationController
     @unanswered_count = @questions_count - @answers_count
   end
 
+  def destroy
+    @user = User.find params[:id]
+    @user.destroy
+    flash[:success] = "Пользователь удалён!"
+    redirect_to root_url
+  end
+
   private
 
   def authorize_user
@@ -55,6 +63,6 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:email, :password, :password_confirmation,
-                                 :name, :username, :avatar_url)
+                                 :name, :username, :avatar_url, :background_color)
   end
 end

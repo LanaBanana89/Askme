@@ -5,4 +5,5 @@ class Question < ApplicationRecord
   validates :text, length: { maximum: 255 }
 
   belongs_to :user
+  belongs_to :author, class_name: 'User', optional: true
 end
