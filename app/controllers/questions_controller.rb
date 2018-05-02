@@ -11,7 +11,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
 
-    @question.author_id = current_user.id if current_user.present?
+    @question.author = current_user if current_user.present?
 
 
     if @question.save
