@@ -28,4 +28,10 @@
   font-size: 15px;
   line-height: 15px;
   padding: 7px 15px;
+  float: left;
+  margin: 10px;
+}
+
+.button-delete a {
+  color: #fff;
 }
