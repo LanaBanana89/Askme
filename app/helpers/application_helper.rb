@@ -39,4 +39,9 @@ module ApplicationHelper
       return krokodilov
     end
   end
+
+  def find_hashtag(string)
+    hashtag_regexp = /#[[:word:]-]+/
+    hashtags = string.scan(hashtag_regexp)
+  end
 end

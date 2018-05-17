@@ -11,4 +11,9 @@ class ApplicationController < ActionController::Base
   def reject_user
     redirect_to root_path, alert: 'Вам сюда низя!'
   end
+
+  def find_hashtag(string)
+    hashtag_regexp = /#[[:word:]-]+/
+    hashtags = string.scan(hashtag_regexp)
+  end
 end

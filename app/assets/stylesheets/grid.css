@@ -38,6 +38,12 @@
   clear: both;
 }
 
+.questions-column {
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .column-3-4 {
   float: left;
   width: 75%;

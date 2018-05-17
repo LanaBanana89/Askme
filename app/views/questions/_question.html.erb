@@ -11,20 +11,37 @@
     <div class="question-text text-lead">
       <%= question.text %>
     </div>
+    
+    <%# Хэштеги, если они есть %>
+    <% if  question.hashtags.any? %>
+      <% question.hashtags.each do |f| %>
+        <div class="question-text text-hashtag">
+          <%= link_to f.text, hashtag_path(f) %> 
+        </div>
+      <% end %>
+    <% end %>
 
     <div class="question-date">
       <% if question.author.present? %>
-      by <%= link_to "@#{question.author.username}", user_path(question.author) %>
+        by <%= link_to "@#{question.author.username}", user_path(question.author) %>
       <% else %>
-      by unknown
+        by unknown
       <% end %>
     </div>
-
+    
     <%# Текст ответа, если он есть %>
-    <% if question.answer.present? %>
-      <div class="question-answer text-lead">
-        <%= question.answer %>
-      </div>
+    <% if question.answer.present? %>      
+        <div class="question-answer text-lead">
+          <%= question.answer %>        
+        </div>
+        <%# Выводим хэштеги у ответа, если они есть %>
+        <% if find_hashtag(question.answer) %>
+          <% find_hashtag(question.answer).each do |f| %>
+            <div class="question-text text-hashtag">
+              <%= f %> 
+            </div>
+          <% end %>
+        <% end %>
     <% end %>
 
     <%# Дата создания вопроса (отформатированная) %>

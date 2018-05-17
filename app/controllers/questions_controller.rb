@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
   before_action :authorize_user, except: [:create]
 
   # GET /questions/1/edit
+
   def edit
   end
 
@@ -12,6 +13,14 @@ class QuestionsController < ApplicationController
     @question = Question.new(question_params)
 
     @question.author = current_user
+
+    hashtags = find_hashtag(@question.text)
+
+    if hashtags.any?
+      hashtags.each do |hashtag|
+        @question.hashtags << Hashtag.where(text: hashtag).first_or_create
+      end
+    end
 
     if @question.save
       redirect_to user_path(@question.user), notice: 'Вопрос задан!'
@@ -24,7 +33,30 @@ class QuestionsController < ApplicationController
   # PATCH/PUT /questions/1.json
   def update
     if @question.update(question_params)
-      redirect_to user_path(@question.user), notice: 'Вопрос сохранен!'
+
+       # Проверяем вопрос на наличие хэштегов методом, подключенным в application_controller
+       question_hashtags = find_hashtag(@question.text)
+
+       hashtags_array = []
+
+       if question_hashtags.any?
+         question_hashtags.each do |hashtag|
+            hashtags_array << Hashtag.where(text: hashtag).first_or_create
+         end
+       end
+       # Если вопрос обновился и в нём убрали хэштеги, то формируем и присваиваем
+       # новый массив хэштегов
+       @question.hashtags = hashtags_array
+
+       # Если у хэштега не осталось связей с вопросами, то удаляем из базы такой хэштег
+       @hashtags = Hashtag.all
+
+       @hashtags.each do |hashtag|
+         if hashtag.questions.empty?
+           hashtag.destroy
+         end
+       end
+       redirect_to user_path(@question.user), notice: 'Вопрос сохранен!'
     else
       render :edit
     end
