@@ -13,7 +13,7 @@ class QuestionsController < ApplicationController
     @question.author = current_user
 
     if @question.save
-      Hashtag.create!(@question)
+      @question.add_hashtags
       redirect_to user_path(@question.user), notice: 'Вопрос задан!'
     else
       render :edit
@@ -22,7 +22,7 @@ class QuestionsController < ApplicationController
 
   def update
     if @question.update(question_params)
-      Hashtag.update!(@question)
+      @question.update_hashtags
       redirect_to user_path(@question.user), notice: 'Вопрос сохранен!'
     else
       render :edit
@@ -34,6 +34,7 @@ class QuestionsController < ApplicationController
   def destroy
     user = @question.user
     @question.destroy
+    Hashtag.clear!
 
     redirect_to user_path(user), notice: 'Вопрос удален :('
   end

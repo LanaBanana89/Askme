@@ -40,8 +40,8 @@ module ApplicationHelper
     end
   end
 
-  def find_hashtag(string)
+  def find_hashtags(string)
     hashtag_regexp = /#[[:word:]-]+/
-    hashtags = string.scan(hashtag_regexp)
+    hashtags = string.scan(hashtag_regexp).uniq
   end
 end

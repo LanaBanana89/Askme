@@ -12,9 +12,9 @@
       <%= question.text %>
     </div>
     
-    <%# Выводим хэштеги у вопроса, если они есть %>    
-    <% if find_hashtag(question.text) %>
-      <% find_hashtag(question.text).each do |f| %>
+    <%# Выводим хэштеги у вопроса, если они есть %>  
+    <% if find_hashtags(question.text) %>
+      <% find_hashtags(question.text).each do |f| %>
         <div class="question-text text-hashtag">
           <%= link_to f, hashtag_path(Hashtag.find_by(text: f)) %> 
         </div>
@@ -35,8 +35,8 @@
           <%= question.answer %>        
         </div>
         <%# Выводим хэштеги у ответа, если они есть %>
-        <% if find_hashtag(question.answer) %>
-          <% find_hashtag(question.answer).each do |f| %>
+        <% if find_hashtags(question.answer) %>
+          <% find_hashtags(question.answer).each do |f| %>
             <div class="question-text text-hashtag">
               <%= link_to f, hashtag_path(Hashtag.find_by(text: f)) %> 
             </div>
