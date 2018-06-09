@@ -11,22 +11,12 @@ class Question < ApplicationRecord
 
   # добавляем к вопросу хэштеги, если они есть
   def add_hashtags
-    hashtags = find_hashtags(self.text)
+    string = self.text + " " + self.answer.to_s
+    hashtags = find_hashtags(string)
+    self.hashtags = Array.new
     if hashtags.any?
       Hashtag.create!(self, hashtags)
     end
-  end
-
-  # обновляем список хэштегов у вопроса
-  def update_hashtags
-    # ищем хэштеги в вопросе и в ответе
-    string = self.text + " " + self.answer
-    hashtags = find_hashtags(string)
-
-    # обновляем хэштеги
-    self.hashtags = Array.new
-    Hashtag.create!(self, hashtags)
-    # удаляем хэштеги, если из вопроса удалили хэштег
     Hashtag.clear!
   end
 
