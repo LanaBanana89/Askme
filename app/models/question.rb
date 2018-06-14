@@ -22,6 +22,6 @@ class Question < ApplicationRecord
   # ищем хэштеги в строке и оставляем только уникальные
   def find_hashtags
     hashtag_regexp = /#[[:word:]-]+/
-    (text.to_s + answer.to_s).scan(hashtag_regexp).uniq
+    (text.to_s + " " + answer.to_s).scan(hashtag_regexp).uniq
   end
 end
