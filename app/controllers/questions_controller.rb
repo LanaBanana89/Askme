@@ -59,7 +59,7 @@ class QuestionsController < ApplicationController
     end
 
     private
-  
+
     def check_captcha(model)
       if current_user.present?
         true

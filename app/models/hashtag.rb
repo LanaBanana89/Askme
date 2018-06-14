@@ -11,13 +11,11 @@ class Hashtag < ApplicationRecord
   end
 
   # метод удаления хэштегов
-  def self.clear!
-    hashtags = Hashtag.all
-
-    hashtags.each do |hashtag|
-      if hashtag.questions.empty?
-        hashtag.destroy
-      end
+  def self.clear!(question, hashtags_to_delete)
+    hashtags_to_delete.each do |tag|
+        hastag = Hashtag.where(text:tag).first
+        question.hashtags.delete(hastag)
+        hastag.destroy if hastag.questions.empty?
     end
   end
 end

@@ -11,18 +11,16 @@ class Question < ApplicationRecord
 
   # добавляем к вопросу хэштеги, если они есть
   def add_hashtags
-    string = self.text + " " + self.answer.to_s
-    hashtags = find_hashtags(string)
-    self.hashtags = Array.new
-    if hashtags.any?
-      Hashtag.create!(self, hashtags)
-    end
-    Hashtag.clear!
+    hashtags_to_add = find_hashtags - hashtags.collect(&:text)
+    hashtags_to_delete = hashtags.collect(&:text) - find_hashtags
+
+    Hashtag.create!(self, hashtags_to_add)
+    Hashtag.clear!(self, hashtags_to_delete)
   end
 
   # ищем хэштеги в строке и оставляем только уникальные
-  def find_hashtags(string)
+  def find_hashtags
     hashtag_regexp = /#[[:word:]-]+/
-    hashtags = string.scan(hashtag_regexp).uniq
+    (text.to_s + answer.to_s).scan(hashtag_regexp).uniq
   end
 end
