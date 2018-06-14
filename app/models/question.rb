@@ -9,7 +9,8 @@ class Question < ApplicationRecord
 
   has_and_belongs_to_many :hashtags, join_table: :hashtags_questions, dependent: :destroy
 
-  # добавляем к вопросу хэштеги, если они есть
+  # добавляем к вопросу хэштеги, если они есть;
+  # и удаляем хэштеги, которые не относятся больше ни к каким вопросам
   def add_hashtags
     hashtags_to_add = find_hashtags - hashtags.collect(&:text)
     hashtags_to_delete = hashtags.collect(&:text) - find_hashtags
